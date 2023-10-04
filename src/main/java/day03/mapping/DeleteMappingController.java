@@ -24,5 +24,5 @@ public class DeleteMappingController {
         System.out.println("map = "+map);
         return false;
     }
-    
+
 }
