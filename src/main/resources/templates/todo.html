@@ -15,16 +15,18 @@
         <h1> 나만의 할일 목록 </h1>
 
         <div class="todo_top"><!--쓰기 구역-->
-            <input type="text">
-            <button type="button"> 등록 </button>
+            <input class="tcontent" type="text">
+            <button onclick="uploadPost()" type="button"> 등록 </button>
         </div>
+
         <div class="todo_bottom"><!--출력 구역-->
+
             <div class="todo"><!--todo 항목 1개-->
 
-                <div class="tcontent"> 리액트 배우기  </div>
+                <div class="tcontent"> 리액트 배우기 </div>
                 <div class="ectbtns">
-                    <button type="button"> 상태변경 </button>
-                    <button type="button"> 제거하기 </button>
+                    <button onclick="putContent()" type="button"> 상태변경 </button>
+                    <button onclick="deleteContent()" type="button"> 제거하기 </button>
                 </div>
 
             </div>
@@ -35,7 +37,10 @@
 
     </div>
 
-    <script src="/todo.js"></script>
+
+    <!-- 최신 JQUERY 불러오기 : AJAX메소드 사용하기 위해 : JS가 외부로부터 통신하기 위해 -->
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/todo.js" type="text/javascript"></script>
 
 </body>
 </html>
