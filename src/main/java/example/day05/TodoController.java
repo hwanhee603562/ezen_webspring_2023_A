@@ -17,27 +17,29 @@ public class TodoController {
     @PostMapping
     public boolean doPost( @RequestBody TodoDto todoDto){
         // @RequestBody => Dto 와 매개변수가 동일해야 하고 setter가 있어야한다!.
-        boolean result=todoService.dopost(todoDto);
+        boolean result = todoService.doPost(todoDto);
         return result;
     }
 
     @GetMapping
     public List<TodoDto> doGet(){
-        List<TodoDto> result=todoService.doget();
+        List<TodoDto> result = todoService.doGet();
+
         return result;
+
     }
 
     @PutMapping
     public boolean doPut(@RequestBody TodoDto todoDto ){
         // @RequestBody => Dto 와 매개변수가 동일해야 하고 setter가 있어야한다!.
-        boolean result=todoService.doput(todoDto);
+        boolean result = todoService.doPut(todoDto);
         return result;
 
     }
 
     @DeleteMapping
     public boolean doDelete(@RequestParam int tno){
-        boolean result=todoService.dodelete(tno);
+        boolean result = todoService.doDelete(tno);
         return result;
     }
 
