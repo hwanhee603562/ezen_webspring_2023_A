@@ -113,6 +113,7 @@ function deleteContent( tno ){
         $.ajax({
             url: '/todo',
             type: 'delete',
+            async: false,
             data: {
                 tno: tno,
             },

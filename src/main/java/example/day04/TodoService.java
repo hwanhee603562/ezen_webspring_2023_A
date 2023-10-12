@@ -30,11 +30,9 @@ public class TodoService {
 
     // 3. [ U ]
     public boolean doPut(TodoDto todoDto) {
-        System.out.println("Service doPut");
-        System.out.println( todoDto.isTstate() );
+
         todoDto.setTstate( !todoDto.isTstate() );
 
-        System.out.println( todoDto.isTstate() );
 
         return todoDao.doPut(todoDto);
     }
