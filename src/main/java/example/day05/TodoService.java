@@ -15,6 +15,7 @@ import java.util.Optional;
         JPA 엔티티 테이블 CRUD
             삽입                      : insert     인터페이스명.save(저장할 엔티티)
             조회                      : select     인터페이스명.findAll()
+                                                  인터페이스명.findId()
             수정                      : update     인터페이스명.save(수정할 엔티티)
             삭제                      : delete     인터페이스명.delete()
             삭제할 아이디 찾아서 삭제     : delete     인터페이스명.deleteById(pk번호)
@@ -86,7 +87,7 @@ public class TodoService {
 
          */
 
-    
+
 
     }
 

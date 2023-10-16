@@ -1,45 +1,36 @@
-console.log('Hello World!');
+
 
 // 1. get
 getContent()
 function getContent(){
     console.log('get');
     $.ajax({
-        url: '/todo',
+        url: '/todos',
         type: 'get',
         data: {},
         success: s => {
             console.log(s);
-            let todo_bottom = document.querySelector('.todo_bottom');
+            let todos_bottom = document.querySelector('.todos_bottom');
             let html = ``
 
             s.forEach( p =>{
 
-                if( p.tstate ){
+
                      html += `
-                        <div class="todo">
-                            <div class="tcontent"> ${p.tcontent} </div>
+                        <div class="todos">
+                            <div class="outputPname"> ${p.pname} </div>
+                            <div class="outputPhone"> ${p.phone} </div>
                             <div class="ectbtns">
-                                <button onclick="putContent( ${p.tno}, '${p.tcontent}', '${p.tstate}' )" type="button"> 상태변경 </button>
-                                <button onclick="deleteContent( ${p.tno} )" type="button"> 제거하기 </button>
+                                <button onclick="putContent( ${p.pno} )" type="button"> 수정하기 </button>
+                                <button onclick="deleteContent( ${p.pno} )" type="button"> 제거하기 </button>
                             </div>
                         </div>
                     `
-                } else {
-                    html += `
-                        <div class="todo successTodo">
-                            <div class="tcontent"> ${p.tcontent} </div>
-                            <div class="ectbtns">
-                                <button onclick="putContent( ${p.tno}, '${p.tcontent}', '${p.tstate}' )" type="button"> 상태변경 </button>
-                                <button onclick="deleteContent( ${p.tno} )" type="button"> 제거하기 </button>
-                            </div>
-                        </div>
-                    `
-                }
+
 
             })
 
-            todo_bottom.innerHTML = html;
+            todos_bottom.innerHTML = html;
 
         },
         error: e => {
@@ -50,54 +41,58 @@ function getContent(){
 
 // 2. post
 function uploadPost(){
-    console.log('post');
-    let tcontent = document.querySelector('.tcontent').value;
+
+    let pname = document.querySelector('.pname').value;
+    let phone = document.querySelector('.phone').value;
 
     $.ajax({
-        url: '/todo',
+        url: '/todos',
         type: 'post',
         async: false,
         contentType:
             'application/json',
             data: JSON.stringify({
                 tno: 0,
-                tcontent: tcontent,
-                tstate: true }),
+                pname: pname,
+                phone: phone }),
         success: s => {
 
             if( s ){
                 console.log('PUTsuccess');
             }
 
-
-
         },
         error: e => {
             console.log('에러발생');
         }
     })
-    tcontent = '';
+
     getContent();
 
 }
 
 // 3. put
-function putContent( tno, tcontent, tstate ){
+function putContent( pno ){
+
+    var newName = prompt("수정할 이름");
+    var newPhone = prompt("수정할 전화번호");
+
 
         $.ajax({
-            url: '/todo',
+            url: '/todos',
             type: 'put',
             async: false,
             contentType: 'application/json',
                     data: JSON.stringify({
-                    tno: tno,
-                    tcontent: tcontent,
-                    tstate: tstate }),
+                    pno: pno,
+                    pname: newName,
+                    phone: newPhone }),
             success: s => {
 
                 if( s ){
                     console.log('PUTsuccess');
                 }
+
             },
             error: e => {
                 console.log('에러발생');
@@ -108,13 +103,14 @@ function putContent( tno, tcontent, tstate ){
 }
 
 // 4. delete
-function deleteContent( tno ){
+function deleteContent( pno ){
 
         $.ajax({
-            url: '/todo',
+            url: '/todos',
             type: 'delete',
+            async: false,
             data: {
-                tno: tno,
+                pno: pno,
             },
             success: s => {
 
