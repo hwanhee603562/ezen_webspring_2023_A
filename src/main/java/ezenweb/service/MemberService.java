@@ -3,10 +3,12 @@ package ezenweb.service;
 import ezenweb.model.dto.MemberDto;
 import ezenweb.model.entity.MemberEntity;
 import ezenweb.model.repository.MemberEntityRepository;
+import jdk.nashorn.internal.ir.RuntimeNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 import java.util.Optional;
@@ -52,11 +54,10 @@ public class MemberService {
     @Transactional
     public boolean login( String memail, String mpassword, HttpSession session ) {
 
-        Optional< MemberEntity > optionlMemberEntity = memberEntityRepository.findByMemail( memail );
-        Optional< MemberEntity > optionlMemberEntity2 = memberEntityRepository.findByMpassword( mpassword );
-        
+        Optional< MemberEntity > optionlMemberEntity = memberEntityRepository.findByMemailAndMpassword(memail, mpassword);
+
         // 2. optional클래스로 검색한 반환값 확인
-        if( optionlMemberEntity.isPresent() && optionlMemberEntity2.isPresent() ){
+        if( optionlMemberEntity.isPresent() ){
             // 3. 만일 optional 클래스 안에 엔티티가 들어있으면
 
             // 4. optional 클래스에서 엔티티 꺼내기
@@ -72,16 +73,14 @@ public class MemberService {
 
             return true;
         }
-        
-        
 
         return false;
     }
 
-
+    /*
     // 2-1. [r] 회원정보 호출 [ 1명 ]
     @Transactional
-    public MemberDto getMember( int mno){
+    public MemberDto getMember( int mno ){
 
         // 1. mno[ 회원번호 pk ]를 이용한 회원 엔티티 찾기
         Optional<MemberEntity> optionlMemberEntity = memberEntityRepository.findById( mno );
@@ -100,6 +99,25 @@ public class MemberService {
 
         return null;
     }
+    */
+
+    @Autowired
+    private HttpServletRequest request;
+
+    // 2-1. [r] 회원정보 호출 [ 1명 ]
+    @Transactional
+    public MemberDto getMember( ) {
+
+        Object session = request.getSession().getAttribute("loginEntity");
+
+        if( session!= null ) {
+            return (MemberDto) session;
+        }
+
+        return null;
+
+    }
+
     // 2-2 로그아웃
     @Transactional
     public boolean logout( HttpSession session ) {
@@ -113,8 +131,6 @@ public class MemberService {
     @Transactional
     // 2-3 아이디 찾기
     public String findId( String mname, String mphone ){
-        System.out.println( mname );
-        System.out.println( mphone );
 
         Optional< MemberEntity > optionlMemberEntity = memberEntityRepository.findByMnameAndMphone(mname, mphone);
 
@@ -128,7 +144,6 @@ public class MemberService {
             System.out.println(memberEntity);
             return memberEntity.getMemail();
         }
-
 
         return "입력 정보를 확인해주세요";
     }
@@ -157,7 +172,7 @@ public class MemberService {
 
     // 3. [u] 회원정보 수정
     @Transactional
-    public boolean updateMember( MemberDto memberDto){
+    public boolean updateMember( MemberDto memberDto ){
 
         // 1. 수정할 엔티티 찾기 [ mno ]
         Optional< MemberEntity > optionlMemberEntity = memberEntityRepository.findById( memberDto.getMno() );

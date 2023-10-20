@@ -5,6 +5,8 @@ import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @AllArgsConstructor
@@ -29,6 +31,14 @@ public class MemberEntity extends BaseTime {
     private String mphone;      // 5. 연락처
     @ColumnDefault( "'user'" )  // default
     private String mrole;       // 6. 회원등급( 일반회원=user / 관리자회원=admin )
+    
+    @Builder.Default    // 빌더패턴 사용시 해당 필드 값을 기본값으로 사용
+    @OneToMany( mappedBy = "memberEntity" )   // 하나가 다수에게 [ pk ]
+    // 게시글목록 = 내가 쓴 게시물
+    // 실제 DB에는 영향을 끼치지 않는다
+    private List<BoardEntity> boardEntityList = new ArrayList<BoardEntity>();
+
+
 
 
 

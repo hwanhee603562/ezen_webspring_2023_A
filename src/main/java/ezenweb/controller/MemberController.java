@@ -14,6 +14,7 @@ public class MemberController {
     @Autowired
     private MemberService memberService;
 
+
     // 1-1. [c] 회원가입
     @PostMapping("/post")
     public boolean postMember(@RequestBody MemberDto memberDto) {
@@ -33,12 +34,23 @@ public class MemberController {
     }
 
     // 2-1. [r] 회원정보 호출
+
+    /*
     @GetMapping("/get")
     public MemberDto getMember(@RequestParam int mno){
         MemberDto memberDto = memberService.getMember( mno );
 
+        return memberDto;ls
+    }
+    */
+    // 2-1. [r] 회원정보 호출 [ 로그인된 ]
+    @GetMapping("/get")
+    public MemberDto getMember(){
+        MemberDto memberDto = memberService.getMember();
+
         return memberDto;
     }
+
     // 2-2. 로그아웃
     @GetMapping("/logout")
     public boolean getMember( HttpSession session ){
