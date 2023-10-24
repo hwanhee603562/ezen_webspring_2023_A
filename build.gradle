@@ -19,7 +19,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     runtimeOnly 'com.mysql:mysql-connector-j'       // mysql 라이브러리
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    compileOnly 'org.projectlombok:lombok'          // lombok 라이브러리
+    compileOnly 'org.projectlombok:lombok'          // lmbok 라이브러리
     annotationProcessor 'org.projectlombok:lombok'  // lombok 라이브러리
     implementation 'org.springframework.boot:spring-boot-starter-web'       // SpringWeb 라이브러리
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'  // Spring Data JPA
