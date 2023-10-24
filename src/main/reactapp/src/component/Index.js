@@ -27,6 +27,9 @@ import 과제2 from './example/day02/과제';
 import Login from './member/Login';
 import Signup from './member/Signup';
 
+/* Axios */
+import Axios from './example/day04/1_Axios컴포넌트';
+
 export default function Index( props ){
     return <>
         <div className="webContainer">
@@ -53,6 +56,8 @@ export default function Index( props ){
 
                     <Route path='/login' element = {< Login />} />
                     <Route path='/signup' element = {< Signup />} />
+
+                    <Route path='/example/day04/Axios' element = {< Axios />} />
 
                 </Routes >
                 <Footer />
