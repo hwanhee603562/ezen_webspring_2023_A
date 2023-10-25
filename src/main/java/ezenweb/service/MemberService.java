@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
     /*
@@ -52,30 +53,23 @@ public class MemberService {
     }
     // 1-2. 로그인
     @Transactional
-    public boolean login( String memail, String mpassword, HttpSession session ) {
-
-        Optional< MemberEntity > optionlMemberEntity = memberEntityRepository.findByMemailAndMpassword(memail, mpassword);
-
-        // 2. optional클래스로 검색한 반환값 확인
-        if( optionlMemberEntity.isPresent() ){
-            // 3. 만일 optional 클래스 안에 엔티티가 들어있으면
-
-            // 4. optional 클래스에서 엔티티 꺼내기
-            MemberEntity memberEntity = optionlMemberEntity.get();
-
-            // 5. 세션 저장
-            session.setAttribute("loginEntity", memberEntity); // 세션에 로그인 정보 저장
-
-            MemberEntity loggedInMember = (MemberEntity) session.getAttribute("loginEntity");
-
-            System.out.println("로그인 성공");
-            System.out.println(loggedInMember);
-
-            return true;
+    public boolean login( MemberDto memberDto  ) {
+        // 1. 입력받은 데이터[아이디/패스워드] 검증하기
+        List<MemberEntity> memberEntities = memberEntityRepository.findAll();
+        // 2. 동일한 아이디 / 비밀번호 찾기
+        for( int i = 0 ; i < memberEntities.size() ; i++ ) {
+            MemberEntity m = memberEntities.get(i);
+            // 3. 동일한 데이터 엔티티 찾았다.
+            if (m.getMemail().equals(memberDto.getMemail()) &&
+                    m.getMpassword().equals(memberDto.getMpassword())) {
+                // 4. 세션 부여      // 세션 저장
+                request.getSession().setAttribute("loginDto", m.toDto());
+                return true;
+            }
         }
-
         return false;
     }
+
 
     /*
     // 2-1. [r] 회원정보 호출 [ 1명 ]

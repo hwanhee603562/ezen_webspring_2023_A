@@ -29,3 +29,77 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+
+
+
+
+
+
+// -------------------------------- 리액트(빌드) 통합 --------------------------------
+// * 터미널에서 리액트를 실행하지 않고 gradle이 리액트를 빌드해서 빌드된 파일을 스프링쪽으로 이동
+// 1. 리액트 코드파일이 있는 리액트프로젝트 폴더 경로
+
+def frontendDir = "$projectDir/src/main/reactapp"
+// $projectDir  : 현재 gradle 프로젝트 위치
+//  = "$projectDir/src/main/{리액트프로젝트폴더명}"
+
+// 2. 리액트 코드파일을 빌드해서 빌드된 파일을 어디로 이동시킬지 정의
+sourceSets {
+    main {
+        resources { srcDirs = ["$projectDir/src/main/resources"]
+        }
+    }
+}
+
+// 3. 이동 [ 원본 이동x, 복사 이동o ]
+processResources { dependsOn "copyReactBuildFiles" }
+
+// 4. 리액트 설치 [ 리액트 라이브러리가 없으면 npm update ]
+task installReact(type: Exec) {
+    workingDir "$frontendDir"
+    inputs.dir "$frontendDir"
+    group = BasePlugin.BUILD_GROUP
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine "npm.cmd", "audit", "fix"
+        commandLine 'npm.cmd', 'install' }
+    else {
+        commandLine "npm", "audit", "fix" commandLine 'npm', 'install'
+    }
+}
+
+// 5. 리액트 빌드
+task buildReact(type: Exec) {
+    dependsOn "installReact"
+    workingDir "$frontendDir"       // 리액트코드가 있는 폴더경로
+    inputs.dir "$frontendDir"       // 빌드 했을 때 저장할 폴더경로
+    group = BasePlugin.BUILD_GROUP
+    if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
+        commandLine "npm.cmd", "run-script", "build"
+    } else {    // 운영체제가 윈도우가 아니면
+        commandLine "npm", "run-script", "build"
+    }
+}
+
+// 6. 리액트 빌드파일 복사
+task copyReactBuildFiles(type: Copy) {
+    dependsOn "buildReact"
+    from "$frontendDir/build"                       // 복사할 파일이 어디에서
+    into "$projectDir/src/main/resources/static"    // 복사할 파일을 어디로
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

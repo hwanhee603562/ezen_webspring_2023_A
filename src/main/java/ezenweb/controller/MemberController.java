@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 @RestController
 @RequestMapping("/member")
+@CrossOrigin("http://localhost:3000") // 교차 리소스 공유 [해당 주소 = 리액트서버]
 public class MemberController {
 
     @Autowired
@@ -25,13 +26,15 @@ public class MemberController {
     }
     // 1-2 로그인
     @PostMapping("/login")
-    public boolean login(@RequestParam String memail, @RequestParam String mpassword, HttpSession session) {
+    public boolean login( @RequestBody MemberDto memberDto , HttpSession session) {
 
-        boolean result = memberService.login(memail, mpassword, session);
+        boolean result = memberService.login(memberDto);
 
         return result;
 
     }
+
+
 
     // 2-1. [r] 회원정보 호출
 
@@ -62,8 +65,6 @@ public class MemberController {
     @GetMapping("/findById")
     public String findById(@RequestParam String mname, @RequestParam String mphone ) {
 
-        System.out.println(mname);
-        System.out.println(mphone);
         String memail = memberService.findId( mname, mphone );
 
         return memail;
