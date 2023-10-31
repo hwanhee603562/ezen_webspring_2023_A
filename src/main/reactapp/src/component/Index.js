@@ -25,6 +25,7 @@ import 과제2 from './example/day02/과제';
 
 /* Member */
 import Login from './member/Login';
+import Info from './member/Info';
 import Signup from './member/Signup';
 
 /* Axios */
@@ -37,6 +38,7 @@ export default function Index( props ){
                 <Header />
                 <Routes >
 
+                    {/* '/'로 접근할 시 메인페이지를 보여줌 */}
                     <Route path='/' element = {< Main />} />
 
                     {/* MAIN */}
@@ -55,6 +57,7 @@ export default function Index( props ){
                     <Route path='/example/day02/과제2' element = {< 과제2 />} />
 
                     <Route path='/login' element = {< Login />} />
+                    <Route path='/info' element = {< Info />} />
                     <Route path='/signup' element = {< Signup />} />
 
                     <Route path='/example/day04/Axios' element = {< Axios />} />

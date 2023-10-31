@@ -55,6 +55,7 @@ public class BoardService {
 
         // 1. 수정할 엔티티 찾기 [ bno 해서 ]
         Optional<BoardEntity> optionalBoardEntity = boardEntityRepository.findById( boardDto.getBno() );
+
         // 2. 만약에 수정할 엔티티가 존재하면
         if( optionalBoardEntity.isPresent() ){
             // 3. 엔티티 꺼내기

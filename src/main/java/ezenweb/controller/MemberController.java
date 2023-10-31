@@ -24,15 +24,7 @@ public class MemberController {
 
         return result;
     }
-    // 1-2 로그인
-    @PostMapping("/login")
-    public boolean login( @RequestBody MemberDto memberDto , HttpSession session) {
 
-        boolean result = memberService.login(memberDto);
-
-        return result;
-
-    }
 
 
 
@@ -50,10 +42,23 @@ public class MemberController {
     @GetMapping("/get")
     public MemberDto getMember(){
         MemberDto memberDto = memberService.getMember();
-
         return memberDto;
     }
 
+
+    /*
+
+
+
+    // 1-2 로그인
+    @PostMapping("/login")
+    public boolean login( @RequestBody MemberDto memberDto , HttpSession session) {
+
+        boolean result = memberService.login(memberDto);
+
+        return result;
+
+    }
     // 2-2. 로그아웃
     @GetMapping("/logout")
     public boolean getMember( HttpSession session ){
@@ -61,6 +66,8 @@ public class MemberController {
 
         return result;
     }
+    */
+
     // 2-3. 아이디 찾기
     @GetMapping("/findById")
     public String findById(@RequestParam String mname, @RequestParam String mphone ) {
@@ -81,6 +88,7 @@ public class MemberController {
     // 3. [u] 회원정보 수정
     @PutMapping("/update")
     public boolean updateMember(@RequestBody MemberDto memberDto){
+
         boolean result = memberService.updateMember( memberDto );
 
         return result;
@@ -89,8 +97,23 @@ public class MemberController {
 
     // 4. [d] 회원탈퇴
     @DeleteMapping("/delete")
-    public boolean deleteMember(@RequestParam int mno){
-        boolean result = memberService.deleteMember( mno );
+    public boolean deleteMember(@RequestParam int mno, HttpSession session){
+        boolean result = memberService.deleteMember( mno, session );
         return result;
     }
+
+    // 7. [R] 이메일 중복검사
+    @GetMapping("/findMemail")
+    public boolean findMemail(@RequestParam String memail){
+
+        boolean result = memberService.getFindMemail( memail );
+
+        return result;
+    }
+
+
+
+
+
+
 }

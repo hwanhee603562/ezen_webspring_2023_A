@@ -3,6 +3,7 @@ package ezenweb.model.entity;
 import ezenweb.model.dto.MemberDto;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
 @Setter
 @Builder
 @ToString
+@DynamicInsert
 @Table( name = "member" )    // DB테이블명 정의   [ 생략시 해당 클래스명이 곧 DB테이블명으로 자동 생성 ]
 public class MemberEntity extends BaseTime {
 
@@ -23,13 +25,13 @@ public class MemberEntity extends BaseTime {
     private int mno;            // 1. 회원번호
     @Column( name = "memail", length = 50, nullable = false, unique = true )   // 해당 필드 선정 [ 속성) name = "필드명" ]
     private String memail;      // 2. 이메일[ 회원아이디 대체 ]
-    @Column( length = 30, nullable = false )
+    @Column( length = 100, nullable = false )
     private String mpassword;    // 3. 비밀번호
     @Column( length = 20, nullable = false )
     private String mname;       // 4. 이름
     @Column( length = 13, nullable = false, unique = true )
     private String mphone;      // 5. 연락처
-    @ColumnDefault( "'user'" )  // default
+    @ColumnDefault( "'ROLE_USER'" )  // default
     private String mrole;       // 6. 회원등급( 일반회원=user / 관리자회원=admin )
     
     @Builder.Default    // 빌더패턴 사용시 해당 필드 값을 기본값으로 사용

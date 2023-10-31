@@ -16,7 +16,7 @@ export default function Login( props ){
             console.log(info);
             // 4. !! AXIOS  통신  [ *SPRING CONTROLLER 매핑 확인후 ]
             axios
-                .post('http://localhost:80/member/login' , info )
+                .post('/member/login' , info )
                 .then( r => {
                     if( r.data ){
                         alert('로그인 성공');
@@ -32,6 +32,20 @@ export default function Login( props ){
     return(<>
         <div className="loginContainer">
             <h3> ReactEzen LOGIN </h3>
+
+            {/* AXIOS가 아닌 configure를 이용한 방식 */}
+            <form action="/member/login" method="post">
+                아이디 <input type="text" placeholder='email address' name='memail' />
+                비밀번호 <input type="password"  placeholder='password' name='mpassword' />
+                <Link to=''>아이디찾기 </Link> <Link to=''> 비밀번호찾기 </Link>
+                <button type="submit">로그인</button>
+            </form>
+        </div>
+    </>)
+}
+
+/*
+    AXIOS를 이용한 로그인 전송방식
             <form>
                 아이디 <input
                     type="text"
@@ -42,10 +56,9 @@ export default function Login( props ){
                     placeholder='password'
                     className='mpassword' />
 
-                { /*Link컴포넌트 사용할려면 import */ }
+
                 <Link to=''>아이디찾기 </Link> <Link to=''> 비밀번호찾기 </Link>
                 <button onClick={ onLogin } type="button">로그인</button>
             </form>
-        </div>
-    </>)
-}
+
+*/
