@@ -12,6 +12,11 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -39,10 +44,22 @@ import java.util.Optional;
 
 
 @Service
-public class MemberService implements UserDetailsService {
+public class MemberService implements
+        UserDetailsService, // 일반회원 서비스 : loadUserByUsername 메소드 구현 [ 로그인처리하는 메소드 ]
+        OAuth2UserService<OAuth2UserRequest, OAuth2User> // Oauth2 회원 서비스 : loadUser 메소드 구현
+{
+    // ========================== 2. Oauth2 회원 ======================== //
+
+    @Override
+    public OAuth2User loadUser( OAuth2UserRequest userRequest ) throws OAuth2AuthenticationException {
+
+        OAuth2User oauth2User = new DefaultOAuth2UserService().loadUser( userRequest );
+        System.out.println("oAuth2User = "+oauth2User);
+        return null;
+    }
 
 
-    // -------------------------------------------------- //
+    // ============================ 1. 일반회원 ========================== //
         // 1. UserDetailsService 구현체
         // 2. 인증처리 해주는 메소드 구현 (localUserByUsername)
         // 3. loadUserByUsername 메소드 무조건 UserDetails 객체를 반환해야 한다
@@ -52,7 +69,7 @@ public class MemberService implements UserDetailsService {
     // @Autowired : 사용불가( 스프링 컨테이너에 등록 안된 빈(객체) 이므로 불가능 / 우리가 만든 클래스 또는 인터페이스가 아님 )
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    // 9. 회원정보 호출
+    // 9. 시큐리티 사용한 인증정보[로그인상태] 호출
     @Transactional
     public MemberDto getMember() {
 
@@ -72,9 +89,14 @@ public class MemberService implements UserDetailsService {
         if( o.equals("anonymousUser") ) return null;
         // 2. 인증결과에 저장된 UserDetails로 반환
         UserDetails userDetails = (UserDetails)o;
+            // 로그인상태에 필요한 데이터 구성
+        MemberEntity memberEntity = memberEntityRepository.findByMemail( userDetails.getUsername() );
+
+
         // 3. UserDetails의 정보를 memberDto에 담아서 반환
         return MemberDto.builder()
-                .memail( userDetails.getUsername() )
+                .memail( memberEntity.getMemail() )
+                .mno( memberEntity.getMno() )
                 .build();
 
     }

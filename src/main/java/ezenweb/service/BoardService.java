@@ -2,6 +2,7 @@ package ezenweb.service;
 
 import ezenweb.model.dto.BoardDto;
 import ezenweb.model.entity.BoardEntity;
+import ezenweb.model.entity.MemberEntity;
 import ezenweb.model.repository.BoardEntityRepository;
 import ezenweb.model.repository.MemberEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +19,49 @@ public class BoardService {
 
     @Autowired
     private BoardEntityRepository boardEntityRepository;
+    @Autowired
+    private MemberService memberService;
+    @Autowired
+    private MemberEntityRepository memberEntityRepository;
+
 
     @Transactional
     public boolean write( BoardDto boardDto ){
-        
-        // 1. dto -> entity 변환 후 저장된 엔티티 반환
-        BoardEntity boardEntity = boardEntityRepository.save( boardDto.saveToEntity() );
 
-        // 2.
-        if( boardEntity.getBno() >= 1 ){
-            return true;
-        }
+        // ============== 단방향
+
+
+        // 회원번호를 가지고 pk엔티티 찾기
+        Optional<MemberEntity> memberEntityOptional =
+                memberEntityRepository.findById( memberService.getMember().getMno() );
+
+        // 유효성 검사 [로그인이 안된 상태 글쓰기 실패]
+        if( !memberEntityOptional.isPresent() ) return false;
+
+        // 단방향 저장
+            // 게시물 생성
+        BoardEntity boardEntity = boardEntityRepository.save( boardDto.saveToEntity() );
+            // 게시물에 작성자 엔티티 넣어주기
+        boardEntity.setMemberEntity(memberEntityOptional.get());
+
+
+        // ============== 단방향 end
+
+
+        // ============== 양방향 ( 위 코드는 기존 단방향 방식이기에 양방향을 사용할 때는 아래 코드를 추가 )
+            // 회원 엔티티에 게시물 엔티티 넣어주기
+        memberEntityOptional.get().getBoardEntityList().add( boardEntity );
+
+
+
+
+
+
+
+
+
+
+        if( boardEntity.getBno() >= 1 ) return true;
 
         return false;
     }
