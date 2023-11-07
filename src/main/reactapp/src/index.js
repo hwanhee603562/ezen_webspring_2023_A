@@ -16,9 +16,9 @@ import reportWebVitals from './reportWebVitals';
          import CommentList from './component/example/day02/CommentList'
          import 과제 from './component/example/day02/과제'
          import 라우터컴포넌트 from './component/example/day03/1_라우터컴포넌트'
+         import 라우터매개변수 from './component/example/day06/1_라우터매개변수'
          import Index from './component/Index'
-         import 상태관리컴포넌트 from './component/example/day05/1_상태관리컴포넌트'
-         import 생명주기컴포넌트 from './component/example/day05/2_생명주기컴포넌트'
+
 
          // 1.index.html 에 <div id="root"> dom객체 호출
          const root = ReactDOM.createRoot(document.getElementById('root'));

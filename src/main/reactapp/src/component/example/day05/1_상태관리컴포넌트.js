@@ -7,8 +7,6 @@ export default function 상태관리컴포넌트(){
     let value1 = 10;
     function value1증가( e ) { value1++; }
 
-
-
     // useState 함수에 매개변수 전달하고 2개를 가지는 배열 리턴
         /*
             useState
@@ -21,7 +19,8 @@ export default function 상태관리컴포넌트(){
                 - 해당 변수는 지역변수가 아닌 공유변수로 사용한다
                 - 하지만 다른 컴포넌트에서는 사용불가
         */
-    let 상태변수 = useState('훅이란무엇인가?');
+    let 상태변수 = useState('훅이란 무엇인가?');
+
     console.log(상태변수);
     console.log(상태변수[0]);
     console.log(상태변수[1]);

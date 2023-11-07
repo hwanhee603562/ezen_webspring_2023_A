@@ -45,6 +45,7 @@ public class BoardEntity extends BaseTime {
   public BoardDto allToDto() {
 
     return BoardDto.builder()
+            .bno(this.bno)
             .btitle(this.btitle)
             .bcontent(this.bcontent)
             .bview(this.bview)

@@ -28,7 +28,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
         // 0. 인증(로그인)된 인가(권한/허가) 통해 페이지 접근 제한
         http.authorizeHttpRequests()    // 1. 인증된 권한에 따른 HTTP 요청 제한
-                .antMatchers( "/info" ).hasRole( "USER" )   // 인증된 권한 중 ROLE_USER이면 해당 HTTP 허용
+                .antMatchers( "/info" ).hasRole( "USER" )           // 인증된 권한 중 USER이면 해당 HTTP 허용
+                .antMatchers( "/board/write" ).hasRole( "USER" )    // 인증된 권한 중 USER이면 해당 게시판 HTTP 허용
                 .antMatchers( "/**" ).permitAll();          // 모든 페이지는 권한을 모두 허용
 
         // 1. 인증(로그인) 커스텀

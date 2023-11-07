@@ -1,11 +1,17 @@
 package ezenweb.service;
 
 import ezenweb.model.dto.BoardDto;
+import ezenweb.model.dto.MemberDto;
+import ezenweb.model.dto.PageDto;
 import ezenweb.model.entity.BoardEntity;
 import ezenweb.model.entity.MemberEntity;
 import ezenweb.model.repository.BoardEntityRepository;
 import ezenweb.model.repository.MemberEntityRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +36,9 @@ public class BoardService {
 
         // ============== 단방향
 
+        // 유효성 검사 [글쓰기 전 로그인 상태 확인
+        MemberDto loginDto = memberService.getMember();
+        if( loginDto == null ) return false;
 
         // 회원번호를 가지고 pk엔티티 찾기
         Optional<MemberEntity> memberEntityOptional =
@@ -53,14 +62,6 @@ public class BoardService {
         memberEntityOptional.get().getBoardEntityList().add( boardEntity );
 
 
-
-
-
-
-
-
-
-
         if( boardEntity.getBno() >= 1 ) return true;
 
         return false;
@@ -68,10 +69,39 @@ public class BoardService {
 
     // 2.
     @Transactional
-    public List<BoardDto> getAll(){
+    public PageDto getAll( int page, String key, String keyword ){
+
+        // * JPA 페이징처리 라이브러리 지원
+            // 1. Pageable : 페이지 인터페이스
+            // 2. 구현체 : 
+                // of (현재페이지, 페이지별게시물수) 
+                    // 현재페이지 0 부터 시작
+                    // 페이지별 게시물 수 : 만약 2일 때는 페이지마다 게시물 2개씩 출력
+            // 3. Page : list와 마찬가지로 여러 개의 객체를 저장하는 타입
+                //
+        Pageable pageable = PageRequest.of( page-1, 2 );
 
         // 1. 모든 게시물 호출
-        List<BoardEntity> boardEntities = boardEntityRepository.findAll();
+        //Page<BoardEntity> boardEntities = boardEntityRepository.findAll( pageable );
+        Page<BoardEntity> boardEntities = boardEntityRepository.findBySearch( key, keyword, pageable );
+
+
+
+        System.out.println(111);
+        System.out.println( boardEntities.getSize() );
+
+
+
+
+
+
+
+
+
+
+
+
+
         // 2. List<BoardEntity>  -->  List<BoardDto>
         List<BoardDto> boardDtos = new ArrayList<>();
 
@@ -79,8 +109,24 @@ public class BoardService {
            boardDtos.add( e.allToDto() );
         });
 
-        return boardDtos;
+        // 3. 총 페이지 수
+        int totalPages = boardEntities.getTotalPages();
+
+        // 4. 총 게시물 수
+        Long totalCount = boardEntities.getTotalElements(); // 요소 : 게시물 1개
+
+        // 5. pageDto 구성해서 axios에게 전달 DIS
+        PageDto pageDto = PageDto.builder()
+                .boardDtos( boardDtos )
+                .totalPages( totalPages )
+                .totalCount( totalCount )
+                .build();
+
+
+        return pageDto;
     }
+    
+    
 
     // 3.
     @Transactional
@@ -121,7 +167,24 @@ public class BoardService {
     }
 
 
+    // 5 [2-2] 개별게시물 출력
+    @Transactional
+    public BoardDto doGet( int bno ){
 
+        // 1. pk번호에 해당하는 엔티티 찾기
+        Optional<BoardEntity> optionalBoardEntity = boardEntityRepository.findById( bno );
+
+        if( optionalBoardEntity.isPresent() ){
+            // 3. 엔티티 꺼내기
+            BoardEntity boardEntity = optionalBoardEntity.get();
+            // 4. 엔티티 -> dto 변환
+            BoardDto boardDto = boardEntity.allToDto();
+            // 5. dto 반환
+            return boardDto;
+        }
+
+        return null;
+    }
 
 
 

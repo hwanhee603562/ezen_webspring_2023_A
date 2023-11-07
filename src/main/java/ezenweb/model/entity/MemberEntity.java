@@ -29,7 +29,7 @@ public class MemberEntity extends BaseTime {
     private String mpassword;    // 3. 비밀번호
     @Column( length = 20, nullable = false )
     private String mname;       // 4. 이름
-    @Column( length = 13, nullable = false, unique = true )
+    @Column( length = 20, nullable = false, unique = true )
     private String mphone;      // 5. 연락처
     @ColumnDefault( "'ROLE_USER'" )  // default
     private String mrole;       // 6. 회원등급( 일반회원=user / 관리자회원=admin )

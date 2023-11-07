@@ -4,6 +4,8 @@
 */
 
 import {BrowserRouter, Routes, Route, Link} from 'react-router-dom';
+
+
 /* 라우터에 적용할 컴포넌트 호출 */
 import Header from './Header';
 import Main from './Main';
@@ -31,6 +33,12 @@ import Signup from './member/Signup';
 /* Axios */
 import Axios from './example/day04/1_Axios컴포넌트';
 
+/* Board */
+import BoardWrite from './board/BoardWrite';
+import BoardList from './board/BoardList';
+import BoardView from './board/BoardView';
+import BoardUpdate from './board/BoardUpdate';
+
 export default function Index( props ){
     return <>
         <div className="webContainer">
@@ -56,12 +64,18 @@ export default function Index( props ){
                     <Route path='/example/day01/과제1' element = {< 과제1 />} />
                     <Route path='/example/day02/과제2' element = {< 과제2 />} />
 
+                    {/* MEMBER */}
                     <Route path='/login' element = {< Login />} />
                     <Route path='/info' element = {< Info />} />
                     <Route path='/signup' element = {< Signup />} />
 
                     <Route path='/example/day04/Axios' element = {< Axios />} />
 
+                    {/* BOARD */}
+                    <Route path='/board/list' element = {< BoardList />} />
+                    <Route path='/board/write' element = {< BoardWrite />} />
+                    <Route path='/board/view' element = {< BoardView />} />
+                    <Route path='/board/update' element = {< BoardUpdate />} />
                 </Routes >
                 <Footer />
             </BrowserRouter>
