@@ -52,8 +52,9 @@ public class BoardEntity extends BaseTime {
             .bfile(this.bfile)
             .bview(this.bview)
             .mno(this.memberEntity.getMno())
-            .cdate(this.getCdate())
-            .udate(this.getUdate())
+            .cdate( toTimeOrDate( this.getCdate() ) )
+            .udate( toTimeOrDate( this.getUdate() ) )
+            .memail( this.memberEntity.getMemail() ) // 작성자 아이디
             .build();
   }
 

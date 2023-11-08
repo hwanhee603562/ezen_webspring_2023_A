@@ -26,10 +26,14 @@ public interface BoardEntityRepository extends JpaRepository<BoardEntity, Intege
     Page< BoardEntity > findByBtitle( String btitle, Pageable pageable );
     // + mysql 실제 SQL 작성하기 @Query
         // @Query( value = "SQL작성", nativeQuery = true )
-    @Query( value = "select * from board where btitle like %:keyword%",
-
+    @Query( value = "select * from board where " +
+            " if( :keyword = '', true , " +                                 // 전체검색
+            " if( :key = 'btitle' , btitle like %:keyword% , " +            // 제목검색
+            " if( :key = 'bcontent', bcontent like %:keyword% , true ))) order By cdate desc",   // 내용검색
             nativeQuery = true )
     Page< BoardEntity > findBySearch( String key, String keyword, Pageable pageable );
+
+
 
 
 }
