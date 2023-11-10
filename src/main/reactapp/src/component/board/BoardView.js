@@ -54,7 +54,13 @@ export default function BoardView( props ){
 
                 <div> 제목 {board.btitle} </div>
                 <div> 내용 {board.bcontent} </div>
+                <div>
 
+                    <a href={"/board/filedownload?uuidFile="+board.bfile}>
+                        { board.bfile }
+                    </a>
+
+                </div>
                 {/* 삭제와 수정은 본인(본인확인)만 가능 */}
                     {/* 삼항연산자를 이용한 컴포넌트 출력 */}
                 {

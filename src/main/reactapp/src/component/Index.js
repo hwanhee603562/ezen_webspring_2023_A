@@ -39,6 +39,9 @@ import BoardList from './board/BoardList';
 import BoardView from './board/BoardView';
 import BoardUpdate from './board/BoardUpdate';
 
+/* Product */
+import ProductAdmin from './product/ProductAdmin';
+
 export default function Index( props ){
     return <>
         <div className="webContainer">
@@ -76,6 +79,10 @@ export default function Index( props ){
                     <Route path='/board/write' element = {< BoardWrite />} />
                     <Route path='/board/view' element = {< BoardView />} />
                     <Route path='/board/update' element = {< BoardUpdate />} />
+
+                    {/* ADMIN */}
+                    <Route path='/admin/product' element = {< ProductAdmin />} />
+
                 </Routes >
                 <Footer />
             </BrowserRouter>

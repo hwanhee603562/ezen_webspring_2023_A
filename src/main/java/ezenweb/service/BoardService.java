@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +30,8 @@ public class BoardService {
     private MemberService memberService;
     @Autowired
     private MemberEntityRepository memberEntityRepository;
+    @Autowired
+    private FileService fileService;
 
 
     @Transactional
@@ -62,7 +65,15 @@ public class BoardService {
         memberEntityOptional.get().getBoardEntityList().add( boardEntity );
 
 
-        if( boardEntity.getBno() >= 1 ) return true;
+        if( boardEntity.getBno() >= 1 ){
+            // 게시물 쓰기 성공시 파일처리
+            String filename
+                    = fileService.fileUpload( boardDto.getFile() );
+            // 파일처리 결과를 DB에 저장
+            if( filename != null ) boardEntity.setBfile( filename );
+
+            return true;
+        }
 
         return false;
     }
@@ -166,6 +177,7 @@ public class BoardService {
 
             // 4. 엔티티 -> dto 변환
             BoardDto boardDto = boardEntity.allToDto();
+
             // 5. dto 반환
             return boardDto;
         }
