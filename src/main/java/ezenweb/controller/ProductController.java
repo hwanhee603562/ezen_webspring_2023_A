@@ -15,13 +15,11 @@ public class ProductController {
     @Autowired
     ProductService productService;
 
+    // ============================= 카테고리
 
     // 1. 카테고리 등록
     @PostMapping("/category")
     public boolean addCategory(@RequestBody ProductCategoryDto productCategoryDto){
-        System.out.println(111);
-        System.out.println(productCategoryDto);
-        System.out.println("productCategoryDto = " + productCategoryDto);
         return productService.addCategory(productCategoryDto);
     }
 
@@ -43,6 +41,70 @@ public class ProductController {
         return productService.deleteCategory(pcno);
     }
 
+    // ============================= 제품
+    
+    // 제품 등록
+    @PostMapping("")
+    public boolean onProductAdd( ProductDto productDto ){
+        return productService.onProductAdd( productDto );
+    }
 
+    // 제품 출력
+    @GetMapping("")
+    public List<ProductDto> onProductAll(){
+        return productService.onProductAll();
+    }
+
+    // 제품 수정
+    @PutMapping("")
+    public boolean onProductUpdate( @RequestBody ProductDto productDto ){
+        return productService.onProductUpdate( productDto );
+    }
+
+    // 제품 삭제
+    @DeleteMapping("")
+    public boolean onProductDelete( @RequestParam String pno ){
+        return productService.onProductDelete( pno );
+    }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

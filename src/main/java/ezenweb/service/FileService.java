@@ -16,9 +16,9 @@ import java.util.UUID;
 /* 파일 관련 메소드 정의 */
 public class FileService {
     
-    // 파일 경로 [배포전]
-    private String fileRootPath = "C:\\java\\";
-    
+    // 파일 경로 [ 절대경로 ]
+    private String fileRootPath = "C:\\Users\\504\\inteliJ\\ezen_webspring_2023_A\\build\\resources\\main\\static\\static\\media\\";
+
     // 1. 업로드
     public String fileUpload(MultipartFile multipartFile){
         
