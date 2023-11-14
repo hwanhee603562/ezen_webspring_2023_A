@@ -1,9 +1,64 @@
 import {Link} from 'react-router-dom';
 import styles from '../css/Header.css';
 import axios from 'axios';
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 
 export default function Header( props ){
+
+    let 변수 = 10;
+    변수++;
+        // 랜더링
+    console.log( 변수 );
+
+    let ref변수 = useRef( 10 );
+    ref변수++
+        // 랜더링
+    console.log( ref변수 );
+
+
+    // 2. 웹 소켓
+    // ========================== 소켓 ===========================
+        // 클라이언트소켓 만들기
+        let 클라이언트소켓 = new WebSocket("ws://localhost:80/chat")
+        console.log( 클라이언트소켓 )
+
+        // 1. 서버소켓과 연동 성공했을 때 이후 행동/메소드 정의
+        클라이언트소켓.onopen = e =>{
+            console.log( 'onopen' )
+            console.log(e)
+        }
+
+        // 2. 서버소켓과 세션 오류가 발생했을 때 이후 행동/메소드 정의
+        클라이언트소켓.onerror = e =>{
+            console.log( 'onerror')
+            console.log(e)
+        }
+
+        // 3. 서버소켓과 연동이 끊겼을 때 이후 행동/메소드 정의
+        클라이언트소켓.onclose = e =>{
+            console.log( 'close' )
+            console.log(e)
+        }
+
+        // 4. 서버소켓으로부터 메시지를 받았을 때 이후 행동/메소드 정의
+        클라이언트소켓.onmessage = e =>{
+            console.log( 'onmessage' )
+            console.log(e)
+        }
+
+
+
+        // 2. 클라이언트 소켓 메시지 전송
+    const msgSend = e => {
+        클라이언트소켓.send("안녕")
+    }
+
+
+
+
+
+    // ======================== 소켓 end =========================
+
 
     // 1. 로그인 상태를 저장할 상태변수 선언
     let [login, setLogin] = useState( null );
@@ -62,6 +117,7 @@ export default function Header( props ){
 
     return <>
         <header>
+            <button type="button" onClick={ msgSend } > 전송 </button>
             <h2> 이젠리액트 </h2>
             <ul>
                 <li> <Link to='/example'> 리액트예제 </Link> </li>
